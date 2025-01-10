@@ -1,23 +1,15 @@
+// src/app/api/pantry/[id]/route.js
 import { NextResponse } from "next/server";
 import dbConnect from "@/lib/dbConnect";
 import Pantry from "@/lib/models/Pantry";
 
-interface UpdateTaskRequestBody {
-  deliveryBoyId: string;
-  mealStatus: string;
-  notes?: string;
-}
-
-export async function PUT(
-  req: Request,
-  { params }: { params: { id: string } }
-) {
+export async function PUT(req, { params }) {
   await dbConnect(); // Ensure database connection
 
-  const { id } = await params; // Extract task ID from route parameters
+  const { id } = params; // Extract task ID from route parameters
 
   try {
-    const body: UpdateTaskRequestBody = await req.json(); // Parse JSON body
+    const body = await req.json(); // Parse JSON body
     const { deliveryBoyId, mealStatus, notes } = body;
 
     // Validate the `mealStatus`
