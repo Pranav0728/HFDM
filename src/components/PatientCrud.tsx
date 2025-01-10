@@ -35,7 +35,7 @@ export default function PatientCrud() {
   };
 
   const validateForm = () => {
-    let formErrors: any = {};
+    const formErrors: any = {};
     if (!newPatient.name) formErrors.name = "Name is required";
     if (newPatient.age <= 0) formErrors.age = "Age must be a positive number";
     if (!newPatient.roomNumber)

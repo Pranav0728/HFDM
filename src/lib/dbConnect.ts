@@ -8,7 +8,7 @@ if (!MONGODB_URL) {
     );
 }
 
-let cached: { conn: Mongoose | null; promise: Promise<Mongoose> | null } = {
+const cached: { conn: Mongoose | null; promise: Promise<Mongoose> | null } = {
     conn: null,
     promise: null,
 };

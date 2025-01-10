@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import dbConnect from "@/lib/dbConnect";  // Your database connection utility
 import Pantry from "@/lib/models/Pantry";  // Assuming Pantry is a Mongoose model
 
-export async function GET(req: Request) {
+export async function GET() {
   try {
     // Connect to the database
     await dbConnect();

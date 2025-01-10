@@ -9,12 +9,6 @@ interface Credentials {
   password?: string;
 }
 
-interface SessionUser {
-  id: string;
-  email: string;
-  role: string;
-}
-
 export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({

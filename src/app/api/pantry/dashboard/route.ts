@@ -3,7 +3,7 @@ import dbConnect from "@/lib/dbConnect";
 import Pantry from "@/lib/models/Pantry";  // Assuming Pantry model is available
 import Patient from "@/lib/models/Patient";  // Assuming Patient model is available
 
-export async function GET(req: Request) {
+export async function GET() {
   try {
     // Get the pantry ID from the request URL (e.g., /api/pantry/dashboard/<id>)
     const pantryId = "60c72b1f9e6f8e0b4c8c0f53";
