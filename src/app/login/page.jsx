@@ -8,7 +8,7 @@ import { useSession } from "next-auth/react";
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const { data: session } = useSession();
@@ -20,7 +20,7 @@ export default function LoginPage() {
     }
   }, [session, router]);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null); // Reset any previous errors
     setLoading(true); // Set loading to true
@@ -38,7 +38,7 @@ export default function LoginPage() {
         router.push("/dashboard"); // Redirect to dashboard after login
       }
     } catch (err) {
-      setError("An unexpected error occurred. Please try again.");
+      setError(err);
     } finally {
       setLoading(false); // Set loading to false after processing
     }
