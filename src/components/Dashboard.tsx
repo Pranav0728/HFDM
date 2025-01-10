@@ -1,7 +1,6 @@
 import { Metadata } from "next";
 import { Button } from "@/components/ui/button";
 import PatientCrud from "@/components/PatientCrud";
-import TaskManager from "@/components/TaskManager";
 import DietAssignment from "@/components/DietAssignment";
 import Analytics from "@/components/Analytic";
 import {
