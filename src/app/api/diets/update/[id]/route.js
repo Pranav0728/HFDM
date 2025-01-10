@@ -6,7 +6,7 @@ import Pantry from "@/lib/models/Pantry";
 export async function PUT(req, { params }) {
   await dbConnect(); // Ensure database connection
 
-  const { id } = params; // Extract task ID from route parameters
+  const { id } = await params; // Extract task ID from route parameters
 
   try {
     const body = await req.json(); // Parse JSON body

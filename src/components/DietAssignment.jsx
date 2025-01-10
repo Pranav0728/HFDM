@@ -131,10 +131,7 @@ const PatientDietManager = () => {
   };
 
   // Function to handle pantry assignment from the frontend
-  const handlePantryAssignment = async (
-    patientId,
-    pantryId
-  ) => {
+  const handlePantryAssignment = async (patientId, pantryId) => {
     try {
       // Construct the request body with all necessary data
       const requestBody = {
@@ -266,12 +263,20 @@ const PatientDietManager = () => {
 
           {meals.map((meal, index) => (
             <div key={index} className="mb-4">
-              <h3 className="font-semibold">{meal.time.charAt(0).toUpperCase() + meal.time.slice(1)} Meal</h3>
+              <h3 className="font-semibold">
+                {meal.time
+                  ? meal.time.charAt(0).toUpperCase() + meal.time.slice(1)
+                  : "Meal"}{" "}
+                Meal
+              </h3>
+
               <input
                 type="text"
                 placeholder="Meal Name"
                 value={meal.name}
-                onChange={(e) => handleMealChange(index, "name", e.target.value)}
+                onChange={(e) =>
+                  handleMealChange(index, "name", e.target.value)
+                }
                 className="border border-gray-300 p-2 rounded-md w-full"
               />
               <textarea
