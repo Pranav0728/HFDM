@@ -4,9 +4,10 @@ import dbConnect from "@/lib/dbConnect";
 import Patient from "@/lib/models/Patient";
 
 // GET: Fetch a single patient by ID
-export async function GET({ params }) {
+export async function GET(request) {
   try {
-    const { id } = params; // Extract patient ID from params
+    const url = new URL(request.url); // Get the URL from the request
+    const id = url.searchParams.get('id'); // Get the 'id' query parameter from the URL
 
     if (!id) {
       return NextResponse.json({ message: "Patient ID is required" }, { status: 400 });
@@ -26,15 +27,16 @@ export async function GET({ params }) {
 }
 
 // PUT: Update an existing patient by ID
-export async function PUT(req, { params }) {
+export async function PUT(request) {
   try {
-    const { id } = params; // Extract patient ID from params
+    const url = new URL(request.url); // Get the URL from the request
+    const id = url.searchParams.get('id'); // Get the 'id' query parameter from the URL
 
     if (!id) {
       return NextResponse.json({ message: "Patient ID is required" }, { status: 400 });
     }
 
-    const data = await req.json(); // Parse the incoming request data
+    const data = await request.json(); // Parse the incoming request data
     await dbConnect();
     const updatedPatient = await Patient.findByIdAndUpdate(id, data, { new: true });
 
@@ -50,9 +52,10 @@ export async function PUT(req, { params }) {
 }
 
 // DELETE: Delete a patient by ID
-export async function DELETE(req, { params }) {
+export async function DELETE(request) {
   try {
-    const { id } = params; // Extract patient ID from params
+    const url = new URL(request.url); // Get the URL from the request
+    const id = url.searchParams.get('id'); // Get the 'id' query parameter from the URL
 
     if (!id) {
       return NextResponse.json({ message: "Patient ID is required" }, { status: 400 });
