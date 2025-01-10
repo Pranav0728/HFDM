@@ -3,6 +3,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import User from "@/lib/models/User";
 import NextAuth, { NextAuthOptions, Session, User as NextAuthUser } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import { JWT } from "next-auth/jwt"; // Import JWT
 
 // Define types for credentials and session
 interface Credentials {
@@ -10,7 +11,7 @@ interface Credentials {
   password?: string;
 }
 
-interface CustomToken extends JWT {
+interface CustomToken extends JWT { // Now JWT is recognized
   id: string;
   email: string;
   role: string;
