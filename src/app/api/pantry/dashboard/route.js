@@ -1,4 +1,4 @@
-// src/app/api/pantry/dashboard/route.ts
+// src/app/api/pantry/dashboard/route.js
 import dbConnect from "@/lib/dbConnect";
 import Pantry from "@/lib/models/Pantry";  // Assuming Pantry model is available
 import Patient from "@/lib/models/Patient";  // Assuming Patient model is available

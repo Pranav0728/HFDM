@@ -1,11 +1,12 @@
+// src/app/api/assignTaskToPantry/route.js
 import { NextResponse } from "next/server";
 import dbConnect from "@/lib/dbConnect";  // Database connection utility
 import Pantry from "@/lib/models/Pantry";  // Pantry model
-import Patient from "@/lib/models/Patient";  // Assuming you have a Patient model
+import Patient from "@/lib/models/Patient";  // Patient model
 import DietChart from "@/lib/models/Diet";  // DietChart model
 import mongoose from "mongoose";
 
-export async function PUT(req: Request) {
+export async function PUT(req) {
   try {
     // Extract pantryId and patientId from the body
     const { pantryId, patientId } = await req.json();
