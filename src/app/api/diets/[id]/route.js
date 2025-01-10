@@ -75,7 +75,7 @@ export async function PUT(req, { params }) {
   }
 }
 
-export async function DELETE(req, { params }) {
+export async function DELETE( { params }) {
   try {
     const { id } = params; // Extract patientId from URL parameters
 
