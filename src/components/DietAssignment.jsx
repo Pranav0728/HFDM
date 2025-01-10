@@ -2,53 +2,25 @@
 
 import { useEffect, useState } from "react";
 
-// Define types for the state variables
-type Meal = {
-  time: "morning" | "evening" | "night";
-  name: string;
-  ingredients: string[];
-  instructions: string;
-};
-
-type Diet = {
-  dietName: string;
-  description: string;
-  meals: Meal[];
-  message?: string;
-};
-
-type Patient = {
-  _id: string;
-  name: string;
-  diet?: Diet | null;
-};
-
-type Pantry = {
-  _id: string;
-  staffName: string;
-};
-
 const PatientDietManager = () => {
-  const [patients, setPatients] = useState<Patient[]>([]);
-  const [pantries, setPantries] = useState<Pantry[]>([]);
+  const [patients, setPatients] = useState([]);
+  const [pantries, setPantries] = useState([]);
   const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null);
   const [dietName, setDietName] = useState<string>("");
   const [description, setDescription] = useState<string>("");
-  const [meals, setMeals] = useState<Meal[]>([
+  const [meals, setMeals] = useState([
     { time: "morning", name: "", ingredients: [], instructions: "" },
     { time: "evening", name: "", ingredients: [], instructions: "" },
     { time: "night", name: "", ingredients: [], instructions: "" },
   ]);
   const [isEditing, setIsEditing] = useState<boolean>(false);
-  const [patientPantrySelection, setPatientPantrySelection] = useState<
-    Record<string, string>
-  >({}); // Track pantry selection per patient
+  const [patientPantrySelection, setPatientPantrySelection] = useState({}); // Track pantry selection per patient
 
   // Fetch all patients and pantries
   useEffect(() => {
     const fetchPatientsAndPantries = async () => {
       const patientsResponse = await fetch("/api/patients");
-      const patientsData: Patient[] = await patientsResponse.json();
+      const patientsData = await patientsResponse.json();
 
       // Fetch diets for each patient
       const patientsWithDiets = await Promise.all(
@@ -62,7 +34,7 @@ const PatientDietManager = () => {
 
       // Fetch pantry data
       const pantriesResponse = await fetch("/api/pantries");
-      const pantriesData: Pantry[] = await pantriesResponse.json();
+      const pantriesData = await pantriesResponse.json();
       setPantries(pantriesData);
     };
 
@@ -81,7 +53,7 @@ const PatientDietManager = () => {
   };
 
   // Open form for editing or creating diet
-  const handleOpenForm = (patient: Patient, diet: Diet | null = null) => {
+  const handleOpenForm = (patient, diet) => {
     setSelectedPatient(patient);
     if (diet && diet.message !== "Diet not found for the given patient") {
       setIsEditing(true);
@@ -95,14 +67,14 @@ const PatientDietManager = () => {
   };
 
   // Handle meal changes (name, ingredients, or instructions)
-  const handleMealChange = (index: number, field: keyof Meal, value: string) => {
+  const handleMealChange = (index, field, value) => {
     const updatedMeals = [...meals];
     updatedMeals[index][field] = value;
     setMeals(updatedMeals);
   };
 
   // Handle adding or removing ingredients
-  const handleIngredientChange = (index: number, ingredients: string[]) => {
+  const handleIngredientChange = (index, ingredients) => {
     const updatedMeals = [...meals];
     updatedMeals[index].ingredients = ingredients.filter(
       (ingredient) => ingredient.trim() !== ""
@@ -129,13 +101,13 @@ const PatientDietManager = () => {
     };
 
     const endpoint = isEditing
-      ? `/api/diets/${selectedPatient!._id}` // PUT for update
+      ? `/api/diets/${selectedPatient._id}` // PUT for update
       : `/api/diets`; // POST for create
 
     const response = await fetch(endpoint, {
       method: isEditing ? "PUT" : "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ ...dietData, patientId: selectedPatient!._id }), // Include patientId
+      body: JSON.stringify({ ...dietData, patientId: selectedPatient._id }), // Include patientId
     });
 
     if (response.ok) {
@@ -151,7 +123,7 @@ const PatientDietManager = () => {
   };
 
   // Handle pantry selection and assignment
-  const handlePantrySelectionChange = (patientId: string, pantryId: string) => {
+  const handlePantrySelectionChange = (patientId, pantryId) => {
     setPatientPantrySelection((prev) => ({
       ...prev,
       [patientId]: pantryId,
@@ -160,8 +132,8 @@ const PatientDietManager = () => {
 
   // Function to handle pantry assignment from the frontend
   const handlePantryAssignment = async (
-    patientId: string,
-    pantryId: string
+    patientId,
+    pantryId
   ) => {
     try {
       // Construct the request body with all necessary data
