@@ -1,5 +1,3 @@
-"use client";
-
 import { useEffect, useState } from "react";
 
 const PatientDietManager = () => {
@@ -14,34 +12,39 @@ const PatientDietManager = () => {
     { time: "night", name: "", ingredients: [], instructions: "" },
   ]);
   const [isEditing, setIsEditing] = useState(false);
-  const [patientPantrySelection, setPatientPantrySelection] = useState({}); // Track pantry selection per patient
+  const [patientPantrySelection, setPatientPantrySelection] = useState({});
+  const [loading, setLoading] = useState(true); // Track loading state
 
-  // Fetch all patients and pantries
   useEffect(() => {
     const fetchPatientsAndPantries = async () => {
-      const patientsResponse = await fetch("/api/patients");
-      const patientsData = await patientsResponse.json();
+      setLoading(true); // Set loading to true at the start of data fetching
+      try {
+        const patientsResponse = await fetch("/api/patients");
+        const patientsData = await patientsResponse.json();
 
-      // Fetch diets for each patient
-      const patientsWithDiets = await Promise.all(
-        patientsData.map(async (patient) => {
-          const dietResponse = await fetch(`/api/diets/${patient._id}`);
-          const diet = await dietResponse.json();
-          return { ...patient, diet: diet || null };
-        })
-      );
-      setPatients(patientsWithDiets);
+        const patientsWithDiets = await Promise.all(
+          patientsData.map(async (patient) => {
+            const dietResponse = await fetch(`/api/diets/${patient._id}`);
+            const diet = await dietResponse.json();
+            return { ...patient, diet: diet || null };
+          })
+        );
+        setPatients(patientsWithDiets);
 
-      // Fetch pantry data
-      const pantriesResponse = await fetch("/api/pantries");
-      const pantriesData = await pantriesResponse.json();
-      setPantries(pantriesData);
+        const pantriesResponse = await fetch("/api/pantries");
+        const pantriesData = await pantriesResponse.json();
+        setPantries(pantriesData);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        alert("Failed to fetch data. Please try again.");
+      } finally {
+        setLoading(false); // End loading when data fetching is complete
+      }
     };
 
     fetchPatientsAndPantries();
   }, []);
 
-  // Reset form when switching patients or creating a new diet
   const resetForm = () => {
     setDietName("");
     setDescription("");
@@ -51,8 +54,18 @@ const PatientDietManager = () => {
       { time: "night", name: "", ingredients: [], instructions: "" },
     ]);
   };
-
-  // Open form for editing or creating diet
+  const handleMealChange = (index, field, value) => {
+    const updatedMeals = [...meals];
+    updatedMeals[index][field] = value;
+    setMeals(updatedMeals);
+  };
+  const handleIngredientChange = (index, ingredients) => {
+    const updatedMeals = [...meals];
+    updatedMeals[index].ingredients = ingredients.filter(
+      (ingredient) => ingredient.trim() !== ""
+    );
+    setMeals(updatedMeals);
+  };
   const handleOpenForm = (patient, diet) => {
     setSelectedPatient(patient);
     if (diet && diet.message !== "Diet not found for the given patient") {
@@ -66,23 +79,6 @@ const PatientDietManager = () => {
     }
   };
 
-  // Handle meal changes (name, ingredients, or instructions)
-  const handleMealChange = (index, field, value) => {
-    const updatedMeals = [...meals];
-    updatedMeals[index][field] = value;
-    setMeals(updatedMeals);
-  };
-
-  // Handle adding or removing ingredients
-  const handleIngredientChange = (index, ingredients) => {
-    const updatedMeals = [...meals];
-    updatedMeals[index].ingredients = ingredients.filter(
-      (ingredient) => ingredient.trim() !== ""
-    );
-    setMeals(updatedMeals);
-  };
-
-  // Save or Update Diet
   const handleSaveDiet = async () => {
     if (!dietName) {
       alert("Please enter a diet name.");
@@ -101,13 +97,13 @@ const PatientDietManager = () => {
     };
 
     const endpoint = isEditing
-      ? `/api/diets/${selectedPatient._id}` // PUT for update
-      : `/api/diets`; // POST for create
+      ? `/api/diets/${selectedPatient._id}`
+      : `/api/diets`;
 
     const response = await fetch(endpoint, {
       method: isEditing ? "PUT" : "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ ...dietData, patientId: selectedPatient._id }), // Include patientId
+      body: JSON.stringify({ ...dietData, patientId: selectedPatient._id }),
     });
 
     if (response.ok) {
@@ -122,7 +118,6 @@ const PatientDietManager = () => {
     }
   };
 
-  // Handle pantry selection and assignment
   const handlePantrySelectionChange = (patientId, pantryId) => {
     setPatientPantrySelection((prev) => ({
       ...prev,
@@ -130,25 +125,14 @@ const PatientDietManager = () => {
     }));
   };
 
-  // Function to handle pantry assignment from the frontend
   const handlePantryAssignment = async (patientId, pantryId) => {
     try {
-      // Construct the request body with all necessary data
-      const requestBody = {
-        patientId: patientId, // Patient ID selected for the task
-        pantryId: pantryId, // Pantry ID selected for the patient
-      };
-
-      // Send the PUT request to the backend
       const response = await fetch(`/api/pantry/assigntask`, {
         method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(requestBody), // Send the data as a JSON string
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ patientId, pantryId }),
       });
 
-      // Check the response status and handle accordingly
       if (response.ok) {
         const data = await response.json();
         alert(data.message || "Task assigned successfully!");
@@ -162,6 +146,14 @@ const PatientDietManager = () => {
     }
   };
 
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <div className="spinner-border animate-spin inline-block w-8 h-8 border-4 rounded-full text-blue-500"></div>
+        <span className="ml-2 text-blue-500 text-xl">Loading...</span>
+      </div>
+    );
+  }
   return (
     <div className="container mx-auto px-4 py-6">
       <h1 className="text-3xl font-semibold mb-4">Patient Diet Management</h1>
