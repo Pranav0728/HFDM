@@ -163,7 +163,9 @@ export default function PatientCrud() {
           </CardHeader>
           <CardContent>
             <form
-              onSubmit={editingPatient ? handleUpdatePatient : handleCreatePatient}
+              onSubmit={
+                editingPatient ? handleUpdatePatient : handleCreatePatient
+              }
             >
               <div className="space-y-4">
                 <div>
@@ -201,7 +203,10 @@ export default function PatientCrud() {
                     className="border border-gray-300 rounded p-2 w-full"
                     value={newPatient.gender}
                     onChange={(e) =>
-                      setNewPatient({ ...newPatient, gender: e.target.value })
+                      setNewPatient({
+                        ...newPatient,
+                        gender: e.target.value as "male" | "female" | "other",
+                      })
                     }
                   >
                     <option value="male">Male</option>
@@ -346,7 +351,7 @@ export default function PatientCrud() {
               <CardTitle>Patient List</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="space-y-4" >
+              <div className="space-y-4">
                 {patients.length > 0 ? (
                   patients.map((patient, index) => (
                     <div
