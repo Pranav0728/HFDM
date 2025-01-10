@@ -1,16 +1,13 @@
-import { NextApiRequest, NextApiResponse } from "next";
+// src/app/api/delivery/dashboard/route.ts
+import { NextResponse } from "next/server";
 import DeliveryBoy from "@/lib/models/Delivery";
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  if (req.method === "GET") {
-    try {
-      const deliveryBoys = await DeliveryBoy.find().populate("assignedTasks");
-      res.status(200).json(deliveryBoys);
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: "Failed to fetch delivery data" });
-    }
-  } else {
-    res.status(405).json({ error: "Method Not Allowed" });
+export async function GET() {
+  try {
+    const deliveryBoys = await DeliveryBoy.find().populate("assignedTasks");
+    return NextResponse.json(deliveryBoys);
+  } catch (error) {
+    console.error(error);
+    return NextResponse.json({ error: "Failed to fetch delivery data" }, { status: 500 });
   }
 }
