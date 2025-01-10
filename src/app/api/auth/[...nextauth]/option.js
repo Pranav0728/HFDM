@@ -7,12 +7,9 @@ export const authOptions = {
   providers: [
     CredentialsProvider({
       name: "credentials",
-      credentials: {
-        email: { label: "Email", type: "email" },
-        password: { label: "Password", type: "password" },
-      },
+      credentials: {},
       async authorize(credentials) {
-        const { email, password } = credentials || {};
+        const { email, password } = credentials;
 
         if (!email || !password) {
           return null; // Return null if credentials are missing
@@ -43,7 +40,6 @@ export const authOptions = {
   },
   callbacks: {
     async jwt({ token, user }) {
-      // If the user is authenticated, add user data to JWT
       if (user) {
         token.id = user._id;
         token.email = user.email;
