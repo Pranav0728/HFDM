@@ -1,14 +1,12 @@
-// In your `patients/[id]/route.ts`
+// src/app/api/patients/[id]/route.js
 import { NextResponse } from "next/server";
 import dbConnect from "@/lib/dbConnect";
 import Diet from "@/lib/models/Diet";
 import mongoose from "mongoose";
 
-
-
-export async function GET({ params }: { params: { id: string } }) {
+export async function GET({ params }) {
   try {
-    const { id } = await params; // Extract the patientId from params
+    const { id } = params; // Extract the patientId from params
 
     if (!id) {
       return NextResponse.json({ message: "Patient ID is required" }, { status: 400 });
@@ -41,8 +39,7 @@ export async function GET({ params }: { params: { id: string } }) {
   }
 }
 
-
-export async function PUT(req: Request, { params }: { params: { id: string } }) {
+export async function PUT(req, { params }) {
   try {
     const { id } = params; // Extract patientId from URL parameters
 
@@ -78,7 +75,7 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
   }
 }
 
-export async function DELETE(req: Request, { params }: { params: { id: string } }) {
+export async function DELETE(req, { params }) {
   try {
     const { id } = params; // Extract patientId from URL parameters
 
