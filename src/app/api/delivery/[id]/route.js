@@ -3,7 +3,6 @@ import { NextResponse } from "next/server";
 import dbConnect from "@/lib/dbConnect";
 import DeliveryBoy from "@/lib/models/Delivery";
 import mongoose from "mongoose";
-import { NextRequest } from "next/server"; // Import NextRequest
 
 export async function GET(req) {
   try {
