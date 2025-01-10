@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import dbConnect from "@/lib/dbConnect";
 import Patient from "@/lib/models/Patient";
 
-export async function GET(req: Request) {
+export async function GET() {
   try {
     await dbConnect();
     const patients = await Patient.find();

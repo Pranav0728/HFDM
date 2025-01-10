@@ -1,4 +1,3 @@
-"use client";
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -11,15 +10,35 @@ import {
 } from "@/components/ui/select";
 import { signOut } from "next-auth/react";
 
+// Define types
+interface PantryData {
+  staffName: string;
+  location: string;
+  contactInfo: string;
+  tasks: Task[];
+}
+
+interface Task {
+  _id: string;
+  mealName: string;
+  ingredients: string[];
+  patientName: string;
+  mealStatus: string;
+}
+
+interface DeliveryBoy {
+  _id: string;
+  name: string;
+}
+
 const PantryDashboard = () => {
-  const [pantryData, setPantryData] = useState<any>(null);
+  const [pantryData, setPantryData] = useState<PantryData | null>(null);
   const [loading, setLoading] = useState(true);
-  const [deliveryBoys, setDeliveryBoys] = useState<any[]>([]);
+  const [deliveryBoys, setDeliveryBoys] = useState<DeliveryBoy[]>([]);
   const [selectedDeliveryBoyByTaskId, setSelectedDeliveryBoyByTaskId] =
-    useState<{ [taskId: string]: string }>({});
-  const [mealStatusByTaskId, setMealStatusByTaskId] = useState<{
-    [taskId: string]: string;
-  }>({});
+    useState<Record<string, string>>({});
+  const [mealStatusByTaskId, setMealStatusByTaskId] =
+    useState<Record<string, string>>({});
 
   useEffect(() => {
     const fetchPantryData = async () => {
@@ -122,7 +141,7 @@ const PantryDashboard = () => {
             </tr>
           </thead>
           <tbody>
-            {pantryData.tasks.map((task: any) => (
+            {pantryData.tasks.map((task: Task) => (
               <tr key={task._id} className="border-b">
                 <td className="px-6 py-4">{task.mealName}</td>
                 <td className="px-6 py-4">{task.ingredients.join(", ")}</td>

@@ -3,7 +3,7 @@ import dbConnect from "@/lib/dbConnect";
 import Patient from "@/lib/models/Patient";
 
 // GET: Fetch a single patient by ID
-export async function GET(req: Request, { params }: { params: { id: string } }) {
+export async function GET( { params }: { params: { id: string } }) {
   try {
     const { id } = await params; // Await params
 
