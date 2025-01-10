@@ -1,0 +1,60 @@
+import { NextResponse } from "next/server";
+import dbConnect from "@/lib/dbConnect";
+import Pantry from "@/lib/models/Pantry";
+
+interface UpdateTaskRequestBody {
+  deliveryBoyId: string;
+  mealStatus: string;
+  notes?: string;
+}
+
+export async function PUT(
+  req: Request,
+  { params }: { params: { id: string } }
+) {
+  await dbConnect(); // Ensure database connection
+
+  const { id } = await params; // Extract task ID from route parameters
+
+  try {
+    const body: UpdateTaskRequestBody = await req.json(); // Parse JSON body
+    const { deliveryBoyId, mealStatus, notes } = body;
+
+    // Validate the `mealStatus`
+    const validMealStatuses = ["pending", "preparing", "completed"];
+    if (!validMealStatuses.includes(mealStatus)) {
+      return NextResponse.json({ error: "Invalid meal status" }, { status: 400 });
+    }
+
+    // Find and update the task in the `Pantry` collection
+    const pantry = await Pantry.findOneAndUpdate(
+      { "tasks._id": id }, // Match the subdocument by ID
+      {
+        $set: {
+          "tasks.$.status": "completed",
+          "tasks.$.deliveryBoyId": deliveryBoyId,
+          "tasks.$.mealStatus": mealStatus,
+          ...(notes && { "tasks.$.notes": notes }), // Update notes only if provided
+        },
+      },
+      { new: true } // Return the updated document
+    );
+
+    // If the task was not found
+    if (!pantry) {
+      return NextResponse.json({ error: "Task not found" }, { status: 404 });
+    }
+
+    // Success response
+    return NextResponse.json(
+      { message: "Task updated successfully", pantry },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error("Error updating task:", error);
+    return NextResponse.json(
+      { error: "Failed to update task", details: error },
+      { status: 500 }
+    );
+  }
+}
