@@ -1,36 +1,24 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Hospital Food Delivery Management System
 
-## Getting Started
+## Tech Stack
 
-First, run the development server:
+### Frontend:
+- **Next.js**: A React framework for building modern web applications. It provides server-side rendering, static site generation, and API routes, making it an ideal choice for building fast, SEO-friendly applications.
+- **Tailwind CSS**: A utility-first CSS framework for creating custom designs without writing custom CSS. It allows rapid UI development with minimal hassle.
+- **TypeScript**: A statically typed superset of JavaScript that helps to prevent runtime errors, improves code quality, and offers better development tooling with autocompletion.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+### Backend:
+- **Next.js API Routes**: We utilize the built-in API routes in Next.js to create the backend endpoints for handling patient data, diet plans, pantry management, etc.
+- **MongoDB**: A NoSQL database to store patient information, diet details, pantry assignments, etc.
+- **Mongoose**: An ODM (Object Data Modeling) library for MongoDB and Node.js. It helps in modeling data and interacting with MongoDB using JavaScript.
+- **JWT (JSON Web Token)**: Used for managing user sessions in a stateless manner.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Authentication:
+- **NextAuth.js**: A powerful and easy-to-use authentication library for Next.js. It supports various authentication providers, including credentials-based login (email/password).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Features
+- **Patient Management**: Add, update, and display patients.
+- **Diet Management**: Create and manage personalized diet plans for patients.
+- **Pantry Management**: Assign pantries to patients for meal deliveries.
+- **User Authentication**: Sign in users using email/password (credentials-based login).
+- **Role-Based Access**: Different roles for users (Admin, Staff).
