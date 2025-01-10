@@ -1,31 +1,9 @@
+// authOptions.js
 import dbConnect from "@/lib/dbConnect";
-import { NextApiRequest, NextApiResponse } from 'next';
 import User from "@/lib/models/User";
-import NextAuth, { NextAuthOptions, Session, User as NextAuthUser } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { JWT } from "next-auth/jwt"; // Import JWT
 
-// Define types for credentials and session
-interface Credentials {
-  email?: string;
-  password?: string;
-}
-
-interface CustomToken extends JWT { // Now JWT is recognized
-  id: string;
-  email: string;
-  role: string;
-}
-
-interface CustomSession extends Session {
-  user: {
-    id: string;
-    email: string;
-    role: string;
-  };
-}
-
-export const authOptions: NextAuthOptions = {
+export const authOptions = {
   providers: [
     CredentialsProvider({
       name: "credentials",
@@ -33,7 +11,7 @@ export const authOptions: NextAuthOptions = {
         email: { label: "Email", type: "email" },
         password: { label: "Password", type: "password" },
       },
-      async authorize(credentials: Credentials) {
+      async authorize(credentials) {
         const { email, password } = credentials || {};
 
         if (!email || !password) {
@@ -64,16 +42,16 @@ export const authOptions: NextAuthOptions = {
     strategy: "jwt", // Use JWT for session management
   },
   callbacks: {
-    async jwt({ token, user }: { token: CustomToken; user?: NextAuthUser }) {
+    async jwt({ token, user }) {
       // If the user is authenticated, add user data to JWT
       if (user) {
-        token.id = user._id.toString(); // Ensure the ID is a string
+        token.id = user._id;
         token.email = user.email;
         token.role = user.role;
       }
       return token;
     },
-    async session({ session, token }: { session: CustomSession; token: CustomToken }) {
+    async session({ session, token }) {
       // Add user data to the session
       if (token) {
         session.user.id = token.id;
@@ -88,5 +66,3 @@ export const authOptions: NextAuthOptions = {
     signIn: "/login", // Custom sign-in page
   },
 };
-
-export default (req: NextApiRequest, res: NextApiResponse) => NextAuth(req, res, authOptions);
