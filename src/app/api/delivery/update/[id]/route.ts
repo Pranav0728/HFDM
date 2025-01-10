@@ -1,27 +1,30 @@
-import { NextApiRequest, NextApiResponse } from "next";
+// src/app/api/delivery/update/[id]/route.ts
+import { NextResponse } from "next/server";
 import DeliveryBoy from "@/lib/models/Delivery";
+import mongoose from "mongoose";
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  if (req.method === "PUT") {
-    const { deliveryId } = req.query;
-    const { isAvailable } = req.body;
+export async function PUT(req: Request, { params }: { params: { id: string } }) {
+  const { id } = params; // Get the deliveryId from params
+  const { isAvailable } = await req.json(); // Get the updated availability status from the request body
 
-    try {
-      const deliveryBoy = await DeliveryBoy.findById(deliveryId);
-      if (!deliveryBoy) {
-        return res.status(404).json({ error: "Delivery Boy not found" });
-      }
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return NextResponse.json({ error: "Invalid Delivery Boy ID format" }, { status: 400 });
+  }
 
-      // Update the delivery boy's availability
-      deliveryBoy.isAvailable = isAvailable !== undefined ? isAvailable : deliveryBoy.isAvailable;
-      await deliveryBoy.save();
-
-      res.status(200).json({ message: "Delivery status updated successfully" });
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: "Failed to update delivery status" });
+  try {
+    // Find the delivery boy by ID
+    const deliveryBoy = await DeliveryBoy.findById(id);
+    if (!deliveryBoy) {
+      return NextResponse.json({ error: "Delivery Boy not found" }, { status: 404 });
     }
-  } else {
-    res.status(405).json({ error: "Method Not Allowed" });
+
+    // Update the delivery boy's availability
+    deliveryBoy.isAvailable = isAvailable !== undefined ? isAvailable : deliveryBoy.isAvailable;
+    await deliveryBoy.save();
+
+    return NextResponse.json({ message: "Delivery status updated successfully" });
+  } catch (error) {
+    console.error(error);
+    return NextResponse.json({ error: "Failed to update delivery status" }, { status: 500 });
   }
 }

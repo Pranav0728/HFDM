@@ -6,7 +6,7 @@ import mongoose from "mongoose";
 
 
 
-export async function GET(req: Request, { params }: { params: { id: string } }) {
+export async function GET({ params }: { params: { id: string } }) {
   try {
     const { id } = await params; // Extract the patientId from params
 
