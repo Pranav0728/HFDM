@@ -9,6 +9,7 @@ export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
   const { data: session } = useSession();
 
@@ -21,23 +22,31 @@ export default function LoginPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError(null); // Reset any previous errors
+    setLoading(true); // Set loading to true
 
-    const result = await signIn("credentials", {
-      email,
-      password,
-      redirect: false,
-    });
-    console.log(result);
-    if (result?.error) {
-      setError("Invalid email or password");
-    } else {
-      router.push("/dashboard"); // Redirect to dashboard after login
+    try {
+      const result = await signIn("credentials", {
+        email,
+        password,
+        redirect: false,
+      });
+
+      if (result?.error) {
+        setError(result.error || "Invalid email or password");
+      } else {
+        router.push("/dashboard"); // Redirect to dashboard after login
+      }
+    } catch (err) {
+      setError("An unexpected error occurred. Please try again.");
+    } finally {
+      setLoading(false); // Set loading to false after processing
     }
   };
 
   return (
     <div className="min-h-screen flex justify-center items-center bg-gradient-to-r from-blue-100 to-indigo-200">
-      <div className="bg-white p-8 rounded-lg shadow-lg max-w-sm w-full">
+      <div className="bg-white p-8 rounded-lg shadow-lg max-w-sm w-full relative">
         <h2 className="text-3xl font-bold text-indigo-600 text-center mb-6">Login</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
@@ -70,9 +79,39 @@ export default function LoginPage() {
 
           <button
             type="submit"
-            className="w-full bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700 transition"
+            disabled={loading}
+            className={`w-full py-2 rounded-lg transition ${
+              loading
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-indigo-600 text-white hover:bg-indigo-700"
+            }`}
           >
-            Login
+            {loading ? (
+              <div className="flex items-center justify-center">
+                <svg
+                  className="animate-spin h-5 w-5 text-white"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  ></circle>
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                  ></path>
+                </svg>
+              </div>
+            ) : (
+              "Login"
+            )}
           </button>
         </form>
       </div>
