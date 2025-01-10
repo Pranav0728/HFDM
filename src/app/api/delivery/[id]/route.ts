@@ -1,16 +1,17 @@
-// app/api/delivery/[id]/route.ts
 import { NextResponse } from "next/server";
 import dbConnect from "@/lib/dbConnect";
 import DeliveryBoy from "@/lib/models/Delivery";
 import mongoose from "mongoose";
+import { NextRequest } from "next/server"; // Import NextRequest
 
-export async function GET({ params }: { params: { id: string } }) {
+export async function GET(req: NextRequest) {
   try {
-    const { id } = await params; // Extract delivery boy ID from params
+    const { id } = req.params; // Extract delivery boy ID from params
 
     if (!id) {
       return NextResponse.json({ message: "Delivery Boy ID is required" }, { status: 400 });
     }
+
     // Check if the ID is valid (delivery boy ID)
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return NextResponse.json({ message: "Invalid Delivery Boy ID format" }, { status: 400 });
@@ -21,7 +22,7 @@ export async function GET({ params }: { params: { id: string } }) {
 
     // Find the delivery boy by ID and populate assigned tasks
     const deliveryBoy = await DeliveryBoy.findById(id).populate("assignedTasks");
-    
+
     if (!deliveryBoy) {
       return NextResponse.json({ message: "Delivery Boy not found" }, { status: 404 });
     }
