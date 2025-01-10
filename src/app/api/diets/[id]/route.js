@@ -4,9 +4,9 @@ import dbConnect from "@/lib/dbConnect";
 import Diet from "@/lib/models/Diet";
 import mongoose from "mongoose";
 
-export async function GET({ params }) {
+export async function GET(req) {
   try {
-    const { id } = params; // Extract the patientId from params
+    const { id } = req.params; // Extract the patientId from params
 
     if (!id) {
       return NextResponse.json({ message: "Patient ID is required" }, { status: 400 });
@@ -39,9 +39,9 @@ export async function GET({ params }) {
   }
 }
 
-export async function PUT(req, { params }) {
+export async function PUT(req) {
   try {
-    const { id } = params; // Extract patientId from URL parameters
+    const { id } = req.params; // Extract patientId from URL parameters
 
     if (!id) {
       return NextResponse.json({ message: "Patient ID is required" }, { status: 400 });
@@ -75,9 +75,9 @@ export async function PUT(req, { params }) {
   }
 }
 
-export async function DELETE( { params }) {
+export async function DELETE(req) {
   try {
-    const { id } = params; // Extract patientId from URL parameters
+    const { id } = req.params; // Extract patientId from URL parameters
 
     if (!id) {
       return NextResponse.json({ message: "Patient ID is required" }, { status: 400 });
