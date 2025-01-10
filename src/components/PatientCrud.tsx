@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "./ui/textarea";
 
 // Define the Patient type
 interface Patient {
@@ -194,7 +195,142 @@ export default function PatientCrud() {
                     <p className="text-red-500 text-sm">{errors.age}</p>
                   )}
                 </div>
-                {/* More form fields... */}
+                <div>
+                  <Label>Gender</Label>
+                  <select
+                    className="border border-gray-300 rounded p-2 w-full"
+                    value={newPatient.gender}
+                    onChange={(e) =>
+                      setNewPatient({ ...newPatient, gender: e.target.value })
+                    }
+                  >
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                    <option value="other">Other</option>
+                  </select>
+                </div>
+
+                <div>
+                  <Label>Diseases</Label>
+                  <Textarea
+                    value={newPatient.diseases}
+                    onChange={(e) =>
+                      setNewPatient({ ...newPatient, diseases: e.target.value })
+                    }
+                    placeholder="List of diseases"
+                    className="w-full"
+                  />
+                </div>
+
+                <div>
+                  <Label>Allergies</Label>
+                  <Textarea
+                    value={newPatient.allergies}
+                    onChange={(e) =>
+                      setNewPatient({
+                        ...newPatient,
+                        allergies: e.target.value,
+                      })
+                    }
+                    placeholder="List of allergies"
+                    className="w-full"
+                  />
+                </div>
+
+                <div>
+                  <Label>Room Number</Label>
+                  <Input
+                    type="number"
+                    value={newPatient.roomNumber}
+                    onChange={(e) =>
+                      setNewPatient({
+                        ...newPatient,
+                        roomNumber: +e.target.value,
+                      })
+                    }
+                    placeholder="101"
+                    className="w-full"
+                  />
+                  {errors.roomNumber && (
+                    <p className="text-red-500 text-sm">{errors.roomNumber}</p>
+                  )}
+                </div>
+
+                <div>
+                  <Label>Bed Number</Label>
+                  <Input
+                    type="number"
+                    value={newPatient.bedNumber}
+                    onChange={(e) =>
+                      setNewPatient({
+                        ...newPatient,
+                        bedNumber: +e.target.value,
+                      })
+                    }
+                    placeholder="3"
+                    className="w-full"
+                  />
+                  {errors.bedNumber && (
+                    <p className="text-red-500 text-sm">{errors.bedNumber}</p>
+                  )}
+                </div>
+
+                <div>
+                  <Label>Floor Number</Label>
+                  <Input
+                    type="number"
+                    value={newPatient.floorNumber}
+                    onChange={(e) =>
+                      setNewPatient({
+                        ...newPatient,
+                        floorNumber: +e.target.value,
+                      })
+                    }
+                    placeholder="2"
+                    className="w-full"
+                  />
+                  {errors.floorNumber && (
+                    <p className="text-red-500 text-sm">{errors.floorNumber}</p>
+                  )}
+                </div>
+
+                <div>
+                  <Label>Contact Info</Label>
+                  <Input
+                    value={newPatient.contactInfo}
+                    onChange={(e) =>
+                      setNewPatient({
+                        ...newPatient,
+                        contactInfo: e.target.value,
+                      })
+                    }
+                    placeholder="123-456-7890"
+                    className="w-full"
+                  />
+                  {errors.contactInfo && (
+                    <p className="text-red-500 text-sm">{errors.contactInfo}</p>
+                  )}
+                </div>
+
+                <div>
+                  <Label>Emergency Contact</Label>
+                  <Input
+                    value={newPatient.emergencyContact}
+                    onChange={(e) =>
+                      setNewPatient({
+                        ...newPatient,
+                        emergencyContact: e.target.value,
+                      })
+                    }
+                    placeholder="987-654-3210"
+                    className="w-full"
+                  />
+                  {errors.emergencyContact && (
+                    <p className="text-red-500 text-sm">
+                      {errors.emergencyContact}
+                    </p>
+                  )}
+                </div>
                 <Button type="submit" className="w-full text-white">
                   {editingPatient ? "Update Patient" : "Add Patient"}
                 </Button>
@@ -210,11 +346,11 @@ export default function PatientCrud() {
               <CardTitle>Patient List</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="space-y-4">
+              <div className="space-y-4" >
                 {patients.length > 0 ? (
-                  patients.map((patient) => (
+                  patients.map((patient, index) => (
                     <div
-                      key={patient._id}
+                      key={index}
                       className="flex justify-between items-center p-4 border-b border-gray-200"
                     >
                       <div>

@@ -4,10 +4,12 @@ import dbConnect from "@/lib/dbConnect";
 import Diet from "@/lib/models/Diet";
 import mongoose from "mongoose";
 
-export async function GET(req) {
+export async function GET(req,{ params }) {
   try {
-    const { id } = req.params; // Extract the patientId from params
-
+    // Extract the patientId from the URL, assuming the route is `/patients/[id]`
+    const { id } =  await params;
+    console.log("Fetching diet for patient with ID:", id);
+    
     if (!id) {
       return NextResponse.json({ message: "Patient ID is required" }, { status: 400 });
     }
@@ -39,9 +41,10 @@ export async function GET(req) {
   }
 }
 
-export async function PUT(req) {
+export async function PUT(req,{ params }) {
   try {
-    const { id } = req.params; // Extract patientId from URL parameters
+    // Extract patientId from URL parameters (use URL or req.query)
+    const { id } = await params
 
     if (!id) {
       return NextResponse.json({ message: "Patient ID is required" }, { status: 400 });
@@ -75,9 +78,10 @@ export async function PUT(req) {
   }
 }
 
-export async function DELETE(req) {
+export async function DELETE(req,{ params }) {
   try {
-    const { id } = req.params; // Extract patientId from URL parameters
+    // Extract patientId from URL parameters (use URL or req.query)
+    const { id } = await params
 
     if (!id) {
       return NextResponse.json({ message: "Patient ID is required" }, { status: 400 });

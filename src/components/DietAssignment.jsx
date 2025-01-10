@@ -5,15 +5,15 @@ import { useEffect, useState } from "react";
 const PatientDietManager = () => {
   const [patients, setPatients] = useState([]);
   const [pantries, setPantries] = useState([]);
-  const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null);
-  const [dietName, setDietName] = useState<string>("");
-  const [description, setDescription] = useState<string>("");
+  const [selectedPatient, setSelectedPatient] = useState(null);
+  const [dietName, setDietName] = useState("");
+  const [description, setDescription] = useState("");
   const [meals, setMeals] = useState([
     { time: "morning", name: "", ingredients: [], instructions: "" },
     { time: "evening", name: "", ingredients: [], instructions: "" },
     { time: "night", name: "", ingredients: [], instructions: "" },
   ]);
-  const [isEditing, setIsEditing] = useState<boolean>(false);
+  const [isEditing, setIsEditing] = useState(false);
   const [patientPantrySelection, setPatientPantrySelection] = useState({}); // Track pantry selection per patient
 
   // Fetch all patients and pantries
