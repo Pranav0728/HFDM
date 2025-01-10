@@ -14,9 +14,6 @@ import { signOut } from "next-auth/react";
 const PantryDashboard = () => {
   const [pantryData, setPantryData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-  const [notesByTaskId, setNotesByTaskId] = useState<{
-    [taskId: string]: string;
-  }>({});
   const [deliveryBoys, setDeliveryBoys] = useState<any[]>([]);
   const [selectedDeliveryBoyByTaskId, setSelectedDeliveryBoyByTaskId] =
     useState<{ [taskId: string]: string }>({});

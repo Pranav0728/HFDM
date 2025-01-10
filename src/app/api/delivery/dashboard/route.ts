@@ -1,7 +1,6 @@
 // pages/api/delivery/dashboard.js
 
 import DeliveryBoy from "@/lib/models/Delivery";
-import Pantry from "@/lib/models/Pantry";
 
 export default async function handler(req:any, res:any) {
   if (req.method === "GET") {
