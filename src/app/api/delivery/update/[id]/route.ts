@@ -1,8 +1,7 @@
-// pages/api/delivery/update/[deliveryId].js
-
+import { NextApiRequest, NextApiResponse } from "next";
 import DeliveryBoy from "@/lib/models/Delivery";
 
-export default async function handler(req:any, res:any) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "PUT") {
     const { deliveryId } = req.query;
     const { isAvailable } = req.body;

@@ -10,12 +10,30 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
+// Define types for the data structures
+type PantryTask = {
+  _id: string;
+  mealName: string;
+  ingredients: string[];
+  patientName: string;
+  patientRoomNumber: string;
+  patientId: { bedNumber: string };
+};
+
+type DeliveryBoy = {
+  _id: string;
+  name: string;
+};
+
 const PantryDashboard = () => {
-  const [pantryData, setPantryData] = useState<any>(null);
+  const [pantryData, setPantryData] = useState<{
+    tasks: PantryTask[];
+  } | null>(null);
   const [loading, setLoading] = useState(true);
-  const [deliveryBoys, setDeliveryBoys] = useState<any[]>([]);
-  const [selectedDeliveryBoyByTaskId, setSelectedDeliveryBoyByTaskId] =
-    useState<{ [taskId: string]: string }>({});
+  const [deliveryBoys, setDeliveryBoys] = useState<DeliveryBoy[]>([]);
+  const [selectedDeliveryBoyByTaskId, setSelectedDeliveryBoyByTaskId] = useState<{
+    [taskId: string]: string;
+  }>({});
 
   useEffect(() => {
     const fetchPantryData = async () => {
@@ -110,7 +128,7 @@ const PantryDashboard = () => {
           </tr>
         </thead>
         <tbody>
-          {pantryData.tasks.map((task: any) => (
+          {pantryData.tasks.map((task) => (
             <tr key={task._id} className="border-b">
               <td className="px-4 py-2">{task.mealName}</td>
               <td className="px-4 py-2">{task.ingredients.join(", ")}</td>

@@ -1,12 +1,26 @@
 import dbConnect from "@/lib/dbConnect";
 import User from "@/lib/models/User";
-import NextAuth, { NextAuthOptions } from "next-auth";
+import NextAuth, { NextAuthOptions, Session, User as NextAuthUser } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
 // Define types for credentials and session
 interface Credentials {
   email?: string;
   password?: string;
+}
+
+interface CustomToken extends JWT {
+  id: string;
+  email: string;
+  role: string;
+}
+
+interface CustomSession extends Session {
+  user: {
+    id: string;
+    email: string;
+    role: string;
+  };
 }
 
 export const authOptions: NextAuthOptions = {
@@ -48,16 +62,16 @@ export const authOptions: NextAuthOptions = {
     strategy: "jwt", // Use JWT for session management
   },
   callbacks: {
-    async jwt({ token, user }: { token: any; user?: any }) {
+    async jwt({ token, user }: { token: CustomToken; user?: NextAuthUser }) {
       // If the user is authenticated, add user data to JWT
       if (user) {
-        token.id = user._id;
+        token.id = user._id.toString(); // Ensure the ID is a string
         token.email = user.email;
         token.role = user.role;
       }
       return token;
     },
-    async session({ session, token }: { session: any; token: any }) {
+    async session({ session, token }: { session: CustomSession; token: CustomToken }) {
       // Add user data to the session
       if (token) {
         session.user.id = token.id;

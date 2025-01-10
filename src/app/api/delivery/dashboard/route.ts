@@ -1,8 +1,7 @@
-// pages/api/delivery/dashboard.js
-
+import { NextApiRequest, NextApiResponse } from "next";
 import DeliveryBoy from "@/lib/models/Delivery";
 
-export default async function handler(req:any, res:any) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "GET") {
     try {
       const deliveryBoys = await DeliveryBoy.find().populate("assignedTasks");

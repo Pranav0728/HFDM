@@ -10,15 +10,17 @@ type Meal = {
   instructions: string;
 };
 
+type Diet = {
+  dietName: string;
+  description: string;
+  meals: Meal[];
+  message?: string;
+};
+
 type Patient = {
   _id: string;
   name: string;
-  diet?: {
-    dietName: string;
-    description: string;
-    meals: Meal[];
-    message?: string;
-  };
+  diet?: Diet | null;
 };
 
 type Pantry = {
@@ -79,7 +81,7 @@ const PatientDietManager = () => {
   };
 
   // Open form for editing or creating diet
-  const handleOpenForm = (patient: Patient, diet: any = null) => {
+  const handleOpenForm = (patient: Patient, diet: Diet | null = null) => {
     setSelectedPatient(patient);
     if (diet && diet.message !== "Diet not found for the given patient") {
       setIsEditing(true);
@@ -93,9 +95,9 @@ const PatientDietManager = () => {
   };
 
   // Handle meal changes (name, ingredients, or instructions)
-  const handleMealChange = (index: number, field: string, value: string) => {
+  const handleMealChange = (index: number, field: keyof Meal, value: string) => {
     const updatedMeals = [...meals];
-    updatedMeals[index][field as keyof Meal] = value;
+    updatedMeals[index][field] = value;
     setMeals(updatedMeals);
   };
 
@@ -278,7 +280,7 @@ const PatientDietManager = () => {
               placeholder="Diet Name"
               value={dietName}
               onChange={(e) => setDietName(e.target.value)}
-              className="border border-gray-300 p-2 w-full rounded-md"
+              className="border border-gray-300 p-2 rounded-md w-full"
             />
           </div>
           <div className="mb-4">
@@ -286,66 +288,47 @@ const PatientDietManager = () => {
               placeholder="Diet Description"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              className="border border-gray-300 p-2 w-full rounded-md"
+              className="border border-gray-300 p-2 rounded-md w-full"
             />
           </div>
+
           {meals.map((meal, index) => (
-            <div key={index} className="mb-6 border p-4 rounded-md shadow-sm">
-              <h3 className="text-xl font-semibold">{meal.time} Meal</h3>
-              <div className="mb-2">
-                <select
-                  value={meal.time}
-                  onChange={(e) =>
-                    handleMealChange(
-                      index,
-                      "time",
-                      e.target.value.toLowerCase()
-                    )
-                  }
-                  className="border border-gray-300 p-2 w-full rounded-md"
-                >
-                  <option value="morning">Morning</option>
-                  <option value="evening">Evening</option>
-                  <option value="night">Night</option>
-                </select>
-              </div>
-              <div className="mb-2">
-                <input
-                  type="text"
-                  placeholder="Meal Name"
-                  value={meal.name}
-                  onChange={(e) => handleMealChange(index, "name", e.target.value)}
-                  className="border border-gray-300 p-2 w-full rounded-md"
-                />
-              </div>
-              <div className="mb-2">
-                <textarea
-                  placeholder="Ingredients (comma separated)"
-                  value={meal.ingredients.join(", ")}
-                  onChange={(e) =>
-                    handleIngredientChange(index, e.target.value.split(","))
-                  }
-                  className="border border-gray-300 p-2 w-full rounded-md"
-                />
-              </div>
-              <div className="mb-2">
-                <textarea
-                  placeholder="Instructions"
-                  value={meal.instructions}
-                  onChange={(e) =>
-                    handleMealChange(index, "instructions", e.target.value)
-                  }
-                  className="border border-gray-300 p-2 w-full rounded-md"
-                />
-              </div>
+            <div key={index} className="mb-4">
+              <h3 className="font-semibold">{meal.time.charAt(0).toUpperCase() + meal.time.slice(1)} Meal</h3>
+              <input
+                type="text"
+                placeholder="Meal Name"
+                value={meal.name}
+                onChange={(e) => handleMealChange(index, "name", e.target.value)}
+                className="border border-gray-300 p-2 rounded-md w-full"
+              />
+              <textarea
+                placeholder="Ingredients"
+                value={meal.ingredients.join(", ")}
+                onChange={(e) =>
+                  handleIngredientChange(index, e.target.value.split(","))
+                }
+                className="border border-gray-300 p-2 rounded-md w-full"
+              />
+              <textarea
+                placeholder="Instructions"
+                value={meal.instructions}
+                onChange={(e) =>
+                  handleMealChange(index, "instructions", e.target.value)
+                }
+                className="border border-gray-300 p-2 rounded-md w-full"
+              />
             </div>
           ))}
-          <button
-            onClick={handleSaveDiet}
-            className="bg-blue-500 text-white px-4 py-2 rounded-md mt-4"
-          >
-            Save Diet
-          </button>
+
+          <div className="flex justify-end">
+            <button
+              onClick={handleSaveDiet}
+              className="bg-blue-500 text-white px-4 py-2 rounded-md"
+            >
+              {isEditing ? "Update Diet" : "Create Diet"}
+            </button>
+          </div>
         </div>
       )}
     </div>
