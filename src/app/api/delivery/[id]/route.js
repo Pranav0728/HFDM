@@ -1,12 +1,15 @@
+// src/app/api/deliveryBoy/[id]/route.js
 import { NextResponse } from "next/server";
 import dbConnect from "@/lib/dbConnect";
 import DeliveryBoy from "@/lib/models/Delivery";
 import mongoose from "mongoose";
 import { NextRequest } from "next/server"; // Import NextRequest
 
-export async function GET(req: NextRequest) {
+export async function GET(req) {
   try {
-    const { id } = req.params; // Extract delivery boy ID from params
+    // Use searchParams to extract the delivery boy ID
+    const { searchParams } = new URL(req.url);
+    const id = searchParams.get("id"); // Get the 'id' from the query parameters
 
     if (!id) {
       return NextResponse.json({ message: "Delivery Boy ID is required" }, { status: 400 });
