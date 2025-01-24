@@ -14,7 +14,7 @@
 - **JWT (JSON Web Token)**: Used for managing user sessions in a stateless manner.
 
 ### Authentication:
-- **NextAuth.js**: A powerful and easy-to-use authentication library for Next.js. It supports various authentication providers, including credentials-based login (email/password).
+- **NextAuth.js**: A easy-to-use authentication library for Next.js. It supports various authentication providers, including credentials-based login (email/password).
 
 ## Features
 - **Patient Management**: Add, update, and display patients.
