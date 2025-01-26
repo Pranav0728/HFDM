@@ -21,4 +21,4 @@
 - **Diet Management**: Create and manage personalized diet plans for patients.
 - **Pantry Management**: Assign pantries to patients for meal deliveries.
 - **User Authentication**: Sign in users using email/password (credentials-based login).
-- **Role-Based Access**: Different roles for users (Admin, Staff).
+- **Role-Based Access**: Different roles for users (Admin, Staff, Pantry).
